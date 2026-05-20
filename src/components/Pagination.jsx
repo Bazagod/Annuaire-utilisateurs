@@ -12,7 +12,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         disabled={currentPage === 1}
         aria-label="Page précédente"
       >
-        ‹
+        <i className="pi pi-angle-left" aria-hidden="true" />
       </button>
 
       <ul className="pagination__pages">
@@ -37,7 +37,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         disabled={currentPage === totalPages}
         aria-label="Page suivante"
       >
-        ›
+        <i className="pi pi-angle-right" aria-hidden="true" />
       </button>
     </nav>
   )

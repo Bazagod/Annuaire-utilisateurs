@@ -32,7 +32,7 @@ export default function UserModal({ user, onClose }) {
           onClick={onClose}
           aria-label="Fermer"
         >
-          ×
+          <i className="pi pi-times" aria-hidden="true" />
         </button>
 
         <header className="modal__header">

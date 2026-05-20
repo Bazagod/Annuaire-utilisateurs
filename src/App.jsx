@@ -1,87 +1,84 @@
-import { useEffect, useState, useMemo } from 'react'
-import Spinner from './components/Spinner'
-import ErrorMessage from './components/ErrorMessage'
-import SearchBar from './components/SearchBar'
-import UserCard from './components/UserCard'
-import UserModal from './components/UserModal'
-import Pagination from './components/Pagination'
-import './App.css'
+import { useEffect, useState, useMemo } from "react";
+import Spinner from "./components/Spinner";
+import ErrorMessage from "./components/ErrorMessage";
+import SearchBar from "./components/SearchBar";
+import UserCard from "./components/UserCard";
+import UserModal from "./components/UserModal";
+import Pagination from "./components/Pagination";
+import "./App.css";
 
-const API_URL = 'https://jsonplaceholder.typicode.com/users'
-const USERS_PER_PAGE = 6
+const API_URL = "https://jsonplaceholder.typicode.com/users";
+const USERS_PER_PAGE = 6;
 
 function App() {
-  const [users, setUsers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [search, setSearch] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
-  const [selectedUser, setSelectedUser] = useState(null)
-  const [retryCount, setRetryCount] = useState(0)
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
-    const controller = new AbortController()
+    const controller = new AbortController();
 
     async function fetchUsers() {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
       try {
-        const response = await fetch(API_URL, { signal: controller.signal })
+        const response = await fetch(API_URL, { signal: controller.signal });
 
         if (!response.ok) {
-          throw new Error(`Erreur HTTP ${response.status}`)
+          throw new Error(`Erreur HTTP ${response.status}`);
         }
 
-        const data = await response.json()
-        setUsers(data)
+        const data = await response.json();
+        setUsers(data);
       } catch (err) {
-        if (err.name !== 'AbortError') {
+        if (err.name !== "AbortError") {
           setError(
-            err.message === 'Failed to fetch'
-              ? 'Impossible de joindre le serveur. Vérifiez votre connexion.'
-              : err.message
-          )
+            err.message === "Failed to fetch"
+              ? "Impossible de joindre le serveur. Vérifiez votre connexion."
+              : err.message,
+          );
         }
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    fetchUsers()
-    return () => controller.abort()
-  }, [retryCount])
+    fetchUsers();
+    return () => controller.abort();
+  }, [retryCount]);
 
   const filteredUsers = useMemo(() => {
-    const query = search.trim().toLowerCase()
-    if (!query) return users
+    const query = search.trim().toLowerCase();
+    if (!query) return users;
 
     return users.filter(
       (user) =>
         user.name.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query) ||
-        user.company.name.toLowerCase().includes(query)
-    )
-  }, [users, search])
+        user.company.name.toLowerCase().includes(query),
+    );
+  }, [users, search]);
 
-  const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE)
+  const totalPages = Math.ceil(filteredUsers.length / USERS_PER_PAGE);
+  const currentPageInRange =
+    totalPages > 0 ? Math.min(currentPage, totalPages) : 1;
 
   const paginatedUsers = useMemo(() => {
-    const start = (currentPage - 1) * USERS_PER_PAGE
-    return filteredUsers.slice(start, start + USERS_PER_PAGE)
-  }, [filteredUsers, currentPage])
+    const start = (currentPageInRange - 1) * USERS_PER_PAGE;
+    return filteredUsers.slice(start, start + USERS_PER_PAGE);
+  }, [filteredUsers, currentPageInRange]);
 
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [search])
+  const handleSearchChange = (value) => {
+    setSearch(value);
+    setCurrentPage(1);
+  };
 
-  useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages)
-    }
-  }, [currentPage, totalPages])
-
-  const handleRetry = () => setRetryCount((c) => c + 1)
+  const handleRetry = () => setRetryCount((c) => c + 1);
 
   return (
     <div className="app">
@@ -92,11 +89,11 @@ function App() {
       <main className="app-main">
         {!loading && !error && (
           <div className="toolbar">
-            <SearchBar value={search} onChange={setSearch} />
+            <SearchBar value={search} onChange={handleSearchChange} />
             <p className="results-count">
               {filteredUsers.length} utilisateur
-              {filteredUsers.length !== 1 ? 's' : ''} trouvé
-              {filteredUsers.length !== 1 ? 's' : ''}
+              {filteredUsers.length !== 1 ? "s" : ""} trouvé
+              {filteredUsers.length !== 1 ? "s" : ""}
             </p>
           </div>
         )}
@@ -136,7 +133,7 @@ function App() {
         <UserModal user={selectedUser} onClose={() => setSelectedUser(null)} />
       )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

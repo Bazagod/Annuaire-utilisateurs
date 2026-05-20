@@ -1,9 +1,7 @@
 export default function ErrorMessage({ message, onRetry }) {
   return (
     <div className="error-message" role="alert">
-      <span className="error-icon" aria-hidden="true">
-        ⚠
-      </span>
+      <i className="pi pi-exclamation-triangle error-icon" aria-hidden="true" />
       <div>
         <h2>Une erreur est survenue</h2>
         <p>{message}</p>

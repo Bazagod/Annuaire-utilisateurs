@@ -12,10 +12,7 @@
 .app-header h1 {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 700;
-  background: linear-gradient(135deg, var(--color-text), var(--color-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-text);
 }
 
 .app-header p {
@@ -44,8 +41,8 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  width: 1.25rem;
-  height: 1.25rem;
+  font-size: 1.125rem;
+  line-height: 1;
   color: var(--color-text-muted);
   pointer-events: none;
 }
@@ -102,7 +99,7 @@
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -200,6 +197,8 @@
 
 .error-icon {
   font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-error);
   flex-shrink: 0;
 }
 
@@ -365,7 +364,7 @@
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  background: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
